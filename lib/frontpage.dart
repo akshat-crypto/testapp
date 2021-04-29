@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:test1/360view1.dart';
+import 'package:flutter/rendering.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:video_player_360/video_player_360.dart';
+import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class FrontPage extends StatefulWidget {
   @override
@@ -23,6 +24,19 @@ class _FrontPageState extends State<FrontPage> {
       loop: true,
     ),
   );
+  launchWhatsApp() async {
+    final link = WhatsAppUnilink(
+      phoneNumber: '+919461246324',
+      text: "Hey! I'm inquiring about the apartment listing",
+    );
+
+    await launch('$link');
+  }
+
+  String _url = 'https://360virtualindia.in/physicslabvt';
+  void _launchURL() async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +76,7 @@ class _FrontPageState extends State<FrontPage> {
                   height: 40,
                 ),
                 RaisedButton(
-                  onPressed: () => {},
+                  onPressed: () => {launchWhatsApp()},
                   color: Colors.pink,
                   child: Text('Learn More'),
                   textColor: Colors.white,
@@ -73,70 +87,84 @@ class _FrontPageState extends State<FrontPage> {
           SizedBox(
             height: 30,
           ),
-          Container(
-            width: MediaQuery.of(context).size.width * 80,
-            height: MediaQuery.of(context).size.height * 0.95,
-            padding: EdgeInsets.all(40),
-            color: Colors.amberAccent,
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'OUR PRODUCTS',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 38,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Image(
-                  image: AssetImage('images/tiles.jpg'),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Tiles',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Image(
-                  image: AssetImage('images/granite.jpg'),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Granite',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                RaisedButton(
-                  onPressed: () => {},
-                  color: Colors.pink,
-                  child: Text(
-                    'SEE MORE',
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              // width: MediaQuery.of(context).size.width,
+              height: kIsWeb
+                  ? MediaQuery.of(context).size.height * 1.3
+                  : MediaQuery.of(context).size.height * 0.95,
+              padding: EdgeInsets.all(40),
+              color: Colors.amberAccent,
+              child: Column(
+                children: [
+                  Text(
+                    'OUR PRODUCTS',
                     style: TextStyle(
-                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 38,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Column(
+                        children: [
+                          Image(
+                            image: AssetImage('images/tiles.jpg'),
+                          ),
+                          Text(
+                            'Tiles',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 24,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        children: [
+                          Image(
+                            image: AssetImage('images/granite.jpg'),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Granite',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 24,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  RaisedButton(
+                    onPressed: () => {launchWhatsApp()},
+                    color: Colors.pink,
+                    child: Text(
+                      'SEE MORE',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           SizedBox(
@@ -145,7 +173,9 @@ class _FrontPageState extends State<FrontPage> {
           //360 view button
           Container(
               padding: EdgeInsets.all(20),
-              height: MediaQuery.of(context).size.height * 0.3,
+              height: kIsWeb
+                  ? MediaQuery.of(context).size.height * 0.35
+                  : MediaQuery.of(context).size.height * 0.3,
               width: MediaQuery.of(context).size.width * 1,
               color: Colors.blueAccent,
               child: Column(
@@ -164,10 +194,7 @@ class _FrontPageState extends State<FrontPage> {
                   ),
                   RaisedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ShopPage()),
-                      );
+                      _launchURL();
                     },
                     color: Colors.pink,
                     child: Text(

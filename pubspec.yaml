@@ -33,6 +33,7 @@ dependencies:
   url_launcher:
   video_player_360: ^0.1.5
   webview_flutter: 
+  whatsapp_unilink:
 
 dev_dependencies:
   flutter_test:
